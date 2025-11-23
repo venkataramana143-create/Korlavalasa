@@ -1,0 +1,267 @@
+﻿@page
+@model ContactModel
+@{
+    ViewData["Title"] = "Contact Korlavalasa";
+}
+
+ 
+
+<div class="contact-header">
+    <div class="container">
+        <h1 class="page-title text-center mb-3">
+            <i class="fas fa-envelope me-2"></i>Contact Korlavalasa Village
+        </h1>
+        <p class="text-center mb-0 opacity-75" style="font-size: clamp(1rem, 2vw, 1.2rem);">
+            Get in touch with our village administration and community services
+        </p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Contact Information -->
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="section-title">Village Administration</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="contact-item clickable-contact" onclick="makeCall('@Model.VillageInfo.ContactNumber')">
+                                <i class="fas fa-phone text-success"></i>
+                                <div>
+                                    <h5 class="mb-1">Phone</h5>
+                                    <p class="mb-0 fs-5 fw-bold">@Model.VillageInfo.ContactNumber</p>
+                                    <small class="click-to-call">Click to call</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="contact-item clickable-contact" onclick="sendEmail('@Model.VillageInfo.ContactEmail')">
+                                <i class="fas fa-envelope text-success"></i>
+                                <div>
+                                    <h5 class="mb-1">Email</h5>
+                                    <p class="mb-0 fs-5 fw-bold">@Model.VillageInfo.ContactEmail</p>
+                                    <small class="click-to-call">Click to email</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="contact-item">
+                                <i class="fas fa-user-tie text-success"></i>
+                                <div>
+                                    <h5 class="mb-1">Sarpanch</h5>
+                                    <p class="mb-0 fs-6">@Model.VillageInfo.SarpanchName</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="contact-item">
+                                <i class="fas fa-user-shield text-success"></i>
+                                <div>
+                                    <h5 class="mb-1">Secretary</h5>
+                                    <p class="mb-0 fs-6">@Model.VillageInfo.SecretaryName</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visit Information -->
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="section-title">
+                        <i class="fas fa-map-marker-alt me-2"></i>Visit Our Village
+                    </h3>
+                    <p class="fs-6">We welcome visitors to experience the authentic rural life and rich cultural heritage of Korlavalasa. Our community is known for its warm hospitality and traditional values.</p>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6 mb-3">
+                            <div class="contact-item">
+                                <i class="fas fa-location-arrow text-success"></i>
+                                <div>
+                                    <h5 class="mb-2">Village Address</h5>
+                                    <p class="mb-0 fs-6">@Model.VillageInfo.Address</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="contact-item">
+                                <i class="fas fa-clock text-success"></i>
+                                <div>
+                                    <h5 class="mb-2">Office Hours</h5>
+                                    <p class="mb-1 fs-6">
+                                        <strong>Mon - Sat:</strong> 9:00 AM - 5:00 PM
+                                    </p>
+                                    <p class="mb-0 fs-6">
+                                        <strong>Sunday:</strong> Closed
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Emergency Contacts -->
+            <div class="card emergency-card">
+                <div class="card-body">
+                    <h4 class="text-white mb-4">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Emergency Contacts
+                    </h4>
+
+                    <div class="emergency-list">
+                        <div class="emergency-item" onclick="dialEmergency('100')">
+                            <i class="fas fa-police-box"></i>
+                            <div>
+                                <h6 class="mb-1">Police</h6>
+                                <p class="mb-0 emergency-number">100</p>
+                                <small class="opacity-75">Click to dial</small>
+                            </div>
+                        </div>
+
+                        <div class="emergency-item" onclick="dialEmergency('108')">
+                            <i class="fas fa-ambulance"></i>
+                            <div>
+                                <h6 class="mb-1">Ambulance</h6>
+                                <p class="mb-0 emergency-number">108</p>
+                                <small class="opacity-75">Click to dial</small>
+                            </div>
+                        </div>
+
+                        <div class="emergency-item" onclick="dialEmergency('101')">
+                            <i class="fas fa-fire-extinguisher"></i>
+                            <div>
+                                <h6 class="mb-1">Fire Station</h6>
+                                <p class="mb-0 emergency-number">101</p>
+                                <small class="opacity-75">Click to dial</small>
+                            </div>
+                        </div>
+
+                        <div class="emergency-item" onclick="dialEmergency('1091')">
+                            <i class="fas fa-women"></i>
+                            <div>
+                                <h6 class="mb-1">Women Helpline</h6>
+                                <p class="mb-0 emergency-number">1091</p>
+                                <small class="opacity-75">Click to dial</small>
+                            </div>
+                        </div>
+
+                        <div class="emergency-item" onclick="dialEmergency('1098')">
+                            <i class="fas fa-child"></i>
+                            <div>
+                                <h6 class="mb-1">Child Helpline</h6>
+                                <p class="mb-0 emergency-number">1098</p>
+                                <small class="opacity-75">Click to dial</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Community Services -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="section-title mb-3">
+                        <i class="fas fa-hands-helping me-2"></i>Community Services
+                    </h5>
+                    <ul class="service-list">
+                        <li class="service-item">
+                            <i class="fas fa-clipboard-list me-3"></i>
+                            <span>Birth/Death Certificate</span>
+                        </li>
+                        <li class="service-item">
+                            <i class="fas fa-home me-3"></i>
+                            <span>Property Registration</span>
+                        </li>
+                        <li class="service-item">
+                            <i class="fas fa-tint me-3"></i>
+                            <span>Water Connection</span>
+                        </li>
+                        <li class="service-item">
+                            <i class="fas fa-bolt me-3"></i>
+                            <span>Electricity Services</span>
+                        </li>
+                        <li class="service-item">
+                            <i class="fas fa-tree me-3"></i>
+                            <span>Agriculture Support</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transportation Info -->
+    <div class="row mt-2">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="section-title text-center">
+                        <i class="fas fa-bus me-2"></i>How to Reach Korlavalasa
+                    </h3>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="transport-item">
+                                <i class="fas fa-train"></i>
+                                <h6 class="fw-bold">Nearest Railway Station</h6>
+                                <p class="text-muted mb-1">Chipurupalle </p>
+                                <small class="text-success fw-bold">25 km from village</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="transport-item">
+                                <i class="fas fa-plane"></i>
+                                <h6 class="fw-bold">Nearest Airport</h6>
+                                <p class="text-muted mb-1">Visakhapatnam Airport</p>
+                                <small class="text-success fw-bold">110 km from village</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="transport-item">
+                                <i class="fas fa-road"></i>
+                                <h6 class="fw-bold">Road Connectivity</h6>
+                                <p class="text-muted mb-1">Well-connected by state highways</p>
+                                <small class="text-success fw-bold">Easy access via rural roads</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function makeCall(phoneNumber) {
+        window.open('tel:' + phoneNumber, '_self');
+    }
+
+    function sendEmail(email) {
+        window.open('mailto:' + email, '_self');
+    }
+
+    function dialEmergency(number) {
+        window.open('tel:' + number, '_self');
+    }
+
+    // Add click animation
+    document.addEventListener('DOMContentLoaded', function() {
+        const clickableItems = document.querySelectorAll('.clickable-contact, .emergency-item');
+        clickableItems.forEach(item => {
+            item.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+    });
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

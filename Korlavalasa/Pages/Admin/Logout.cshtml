@@ -1,0 +1,58 @@
+﻿@page
+@model Korlavalasa.Pages.Admin.LogoutModel
+@{
+    ViewData["Title"] = "Logout Confirmation";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card logout-card">
+                <div class="card-header text-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-sign-out-alt me-2"></i>Logout Confirmation
+                    </h4>
+                </div>
+                <div class="card-body text-center py-4">
+                    <div class="mb-4">
+                        <i class="fas fa-question-circle logout-icon"></i>
+                    </div>
+
+                    <h5 class="mb-3">Ready to leave, @User.Identity.Name?</h5>
+                    <p class="text-muted mb-4">
+                        You're about to logout from the admin panel. You'll need to login again to access admin features.
+                    </p>
+
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <form method="post" class="d-inline">
+                            <button type="submit" class="btn btn-logout btn-logout-confirm">
+                                <i class="fas fa-sign-out-alt me-2"></i>Yes, Logout
+                            </button>
+                        </form>
+                        <a asp-page="/Admin/Index" class="btn btn-secondary btn-logout">
+                            <i class="fas fa-arrow-left me-2"></i>Cancel
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer text-center text-muted">
+                    <small>
+                        <i class="fas fa-info-circle me-1"></i>
+                        You will be redirected to the home page after logout.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-focus on the logout button for accessibility
+            const logoutBtn = document.querySelector('button[type="submit"]');
+            if (logoutBtn) {
+                logoutBtn.focus();
+            }
+        });
+    </script>
+}

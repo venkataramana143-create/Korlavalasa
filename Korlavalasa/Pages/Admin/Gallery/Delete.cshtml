@@ -1,0 +1,91 @@
+﻿@page
+@model Korlavalasa.Pages.Admin.Gallery.DeleteModel
+@{
+    ViewData["Title"] = "Delete Image";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card delete-confirmation-card">
+                <div class="card-header text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-trash me-2"></i>Delete Image
+                    </h4>
+                </div>
+                <div class="card-body p-4 text-center">
+                    <!-- Warning Icon -->
+                    <div class="delete-warning-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+
+                    <h3 class="text-danger mb-3">Confirm Deletion</h3>
+                    <p class="lead mb-4">Are you sure you want to delete this image? This action cannot be undone.</p>
+
+                    <!-- Image Preview -->
+                    @if (!string.IsNullOrEmpty(Model.GalleryImage.ImagePath))
+                    {
+                        <img src="@Model.GalleryImage.ImagePath" class="image-to-delete" alt="@Model.GalleryImage.Title"
+                             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbWFnZSBVbmF2YWlsYWJsZTwvdGV4dD48L3N2Zz4='">
+                    }
+
+                    <!-- Image Details -->
+                    <div class="delete-details">
+                        <h5 class="mb-3">Image Details</h5>
+                        <div class="row text-start">
+                            <div class="col-md-6 mb-2">
+                                <strong>Title:</strong> @Model.GalleryImage.Title
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <strong>Category:</strong>
+                                <span class="badge bg-success">@Model.GalleryImage.Category</span>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <strong>Uploaded:</strong> @Model.GalleryImage.UploadDate.ToString("MMM dd, yyyy")
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <strong>Time:</strong> @Model.GalleryImage.UploadDate.ToString("hh:mm tt")
+                            </div>
+                            @if (!string.IsNullOrEmpty(Model.GalleryImage.Description))
+                            {
+                                <div class="col-12 mb-2">
+                                    <strong>Description:</strong> @Model.GalleryImage.Description
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Delete Form -->
+                    <form method="post">
+                        <input type="hidden" asp-for="GalleryImage.Id" />
+                        <div class="delete-actions">
+                            <button type="submit" class="btn btn-delete-confirm">
+                                <i class="fas fa-trash me-2"></i>Yes, Delete Image
+                            </button>
+                            <a asp-page="Index" class="btn btn-delete-cancel">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+
+                    <!-- Warning Note -->
+                    <div class="mt-4">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            This will permanently remove the image from the gallery and it cannot be recovered.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-focus on cancel button for safety
+            document.querySelector('.btn-delete-cancel').focus();
+        });
+    </script>
+}

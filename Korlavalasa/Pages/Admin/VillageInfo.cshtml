@@ -1,0 +1,113 @@
+﻿@page
+@model Korlavalasa.Pages.Admin.VillageInfoModel
+@{
+    ViewData["Title"] = "Edit Village Information";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card village-form-card">
+                <div class="card-header text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>Edit Village Information
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <input type="hidden" asp-for="VillageInfo.Id" />
+
+                        <div class="mb-3">
+                            <label asp-for="VillageInfo.AboutText" class="form-label">About Text *</label>
+                            <textarea asp-for="VillageInfo.AboutText" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="VillageInfo.AboutText" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="VillageInfo.History" class="form-label">History *</label>
+                            <textarea asp-for="VillageInfo.History" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="VillageInfo.History" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="VillageInfo.Population" class="form-label">Population *</label>
+                                    <input asp-for="VillageInfo.Population" class="form-control" type="number" />
+                                    <span asp-validation-for="VillageInfo.Population" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="VillageInfo.Area" class="form-label">Area (sq km) *</label>
+                                    <input asp-for="VillageInfo.Area" class="form-control" type="number" step="0.01" />
+                                    <span asp-validation-for="VillageInfo.Area" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="VillageInfo.MainCrops" class="form-label">Main Crops *</label>
+                            <input asp-for="VillageInfo.MainCrops" class="form-control" />
+                            <span asp-validation-for="VillageInfo.MainCrops" class="text-danger"></span>
+                            <div class="form-text">Separate multiple crops with commas</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="VillageInfo.ContactEmail" class="form-label">Contact Email *</label>
+                                    <input asp-for="VillageInfo.ContactEmail" class="form-control" type="email" />
+                                    <span asp-validation-for="VillageInfo.ContactEmail" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="VillageInfo.ContactNumber" class="form-label">Contact Number *</label>
+                                    <input asp-for="VillageInfo.ContactNumber" class="form-control" />
+                                    <span asp-validation-for="VillageInfo.ContactNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="VillageInfo.Address" class="form-label">Address *</label>
+                            <textarea asp-for="VillageInfo.Address" class="form-control" rows="2"></textarea>
+                            <span asp-validation-for="VillageInfo.Address" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="VillageInfo.SarpanchName" class="form-label">Sarpanch Name *</label>
+                                    <input asp-for="VillageInfo.SarpanchName" class="form-control" />
+                                    <span asp-validation-for="VillageInfo.SarpanchName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="VillageInfo.SecretaryName" class="form-label">Secretary Name *</label>
+                                    <input asp-for="VillageInfo.SecretaryName" class="form-control" />
+                                    <span asp-validation-for="VillageInfo.SecretaryName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between flex-wrap">
+                            <a asp-page="/Admin/Index" class="btn btn-secondary btn-form">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                            </a>
+                            <button type="submit" class="btn btn-success btn-form">
+                                <i class="fas fa-save me-2"></i>Update Village Info
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,428 @@
+﻿@page
+@model Korlavalasa.Pages.Events.IndexModel
+@{
+    ViewData["Title"] = "Village Events";
+}
+
+<style>
+    :root {
+        --primary-green: #2e7d32;
+        --light-green: #4caf50;
+        --dark-green: #1b5e20;
+        --accent-orange: #ff9800;
+        --light-bg: #f8f9fa;
+        --card-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        --card-shadow-hover: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    body {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background-color: var(--light-bg);
+    }
+
+    .events-header {
+        background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+        color: white;
+        padding: 2rem 0;
+        border-radius: 0 0 2rem 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .page-title {
+        font-weight: 700;
+        font-size: clamp(1.75rem, 4vw, 2.5rem);
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .btn-add-event {
+        background: white;
+        color: var(--primary-green);
+        border: none;
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+
+        .btn-add-event:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            color: var(--dark-green);
+        }
+
+    .section-title {
+        position: relative;
+        padding-bottom: 0.75rem;
+        margin: 2rem 0 1.5rem 0;
+        font-weight: 600;
+        color: var(--dark-green);
+        font-size: clamp(1.25rem, 3vw, 1.75rem);
+    }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary-green);
+            border-radius: 2px;
+        }
+
+    .event-card {
+        border: none;
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: var(--card-shadow);
+        margin-bottom: 1.5rem;
+        height: 100%;
+        background: white;
+    }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .event-card .card-header {
+            background: linear-gradient(to right, var(--primary-green), var(--light-green));
+            border-bottom: none;
+            padding: 1.25rem;
+        }
+
+            .event-card .card-header h5 {
+                font-weight: 600;
+                font-size: clamp(1rem, 2.5vw, 1.25rem);
+            }
+
+        .event-card .card-body {
+            padding: 1.5rem;
+        }
+
+    .event-details p {
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: flex-start;
+        font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+
+    .event-details i {
+        margin-top: 0.15rem;
+        min-width: 20px;
+        font-size: 1rem;
+    }
+
+    .badge-today {
+        background: var(--accent-orange);
+        color: white;
+        padding: 0.5rem 0.75rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+
+    .badge-tomorrow {
+        background: #2196f3;
+        color: white;
+        padding: 0.5rem 0.75rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+
+    .badge-upcoming {
+        background: #757575;
+        color: white;
+        padding: 0.5rem 0.75rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+
+    .past-event-card {
+        opacity: 0.85;
+        filter: grayscale(20%);
+    }
+
+        .past-event-card .card-header {
+            background: linear-gradient(to right, #6c757d, #8e9aa2);
+        }
+
+    .no-events {
+        padding: 3rem 1rem;
+        text-align: center;
+        background: white;
+        border-radius: 16px;
+        box-shadow: var(--card-shadow);
+    }
+
+        .no-events i {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: #ddd;
+        }
+
+    .contact-info {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-top: 1rem;
+    }
+
+    /* Mobile-specific styles */
+    @@media (max-width: 768px) {
+        .events-header {
+            padding: 1.5rem 0;
+            border-radius: 0 0 1.5rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .event-card .card-body {
+            padding: 1.25rem;
+        }
+
+        .event-details p {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .event-details i {
+            margin-bottom: 0.25rem;
+        }
+
+        .btn-add-event {
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .card-footer .d-flex {
+            flex-direction: column;
+            gap: 0.75rem;
+            align-items: flex-start !important;
+        }
+
+        .contact-info {
+            margin-top: 0.75rem;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .events-header {
+            padding: 1.25rem 0;
+            border-radius: 0 0 1rem 1rem;
+        }
+
+        .event-card .card-header {
+            padding: 1rem;
+        }
+
+        .event-card .card-body {
+            padding: 1rem;
+        }
+
+        .section-title {
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        .no-events {
+            padding: 2rem 1rem;
+        }
+
+            .no-events i {
+                font-size: 3rem;
+            }
+    }
+
+    /* Desktop enhancements */
+    @@media (min-width: 992px) {
+        .event-card {
+            margin-bottom: 2rem;
+        }
+
+        .row {
+            margin-right: -0.75rem;
+            margin-left: -0.75rem;
+        }
+
+        .col-lg-6 {
+            padding-right: 0.75rem;
+            padding-left: 0.75rem;
+        }
+    }
+</style>
+
+<div class="events-header">
+    <div class="container">
+        <h1 class="page-title text-center mb-4">
+            <i class="fas fa-calendar-alt me-2"></i>Korlavalasa Village Events
+        </h1>
+
+        <!-- Add Event Button -->
+        <div class="text-center">
+            <a href="/Admin/Events/Create" class="btn btn-add-event">
+                <i class="fas fa-plus me-2"></i>Add New Event (Admin)
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Upcoming Events -->
+    <div class="mb-5">
+        <h2 class="section-title">
+            <i class="fas fa-rocket me-2"></i>Upcoming Events
+        </h2>
+
+        @if (Model.UpcomingEvents.Any())
+        {
+            <div class="row">
+                @foreach (var eventItem in Model.UpcomingEvents)
+                {
+                    <div class="col-12 col-lg-6 mb-3">
+                        <div class="card event-card h-100">
+                            <div class="card-header text-white">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-calendar-day me-2"></i>@eventItem.Title
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                @if (!string.IsNullOrEmpty(eventItem.Description))
+                                {
+                                    <p class="card-text mb-3">@eventItem.Description</p>
+                                }
+
+                                <div class="event-details">
+                                    <p>
+                                        <i class="fas fa-calendar me-2 text-success"></i>
+                                        <strong>Date:</strong> @eventItem.EventDate.ToString("dddd, MMMM dd, yyyy")
+                                    </p>
+                                    <p>
+                                        <i class="fas fa-clock me-2 text-success"></i>
+                                        <strong>Time:</strong> @eventItem.EventDate.ToString("hh:mm tt")
+                                    </p>
+
+                                    @if (!string.IsNullOrEmpty(eventItem.Location) || !string.IsNullOrEmpty(eventItem.ContactPerson) || !string.IsNullOrEmpty(eventItem.ContactNumber))
+                                    {
+                                        <div class="contact-info">
+                                            @if (!string.IsNullOrEmpty(eventItem.Location))
+                                            {
+                                                <p class="mb-2">
+                                                    <i class="fas fa-map-marker-alt me-2 text-success"></i>
+                                                    <strong>Location:</strong> @eventItem.Location
+                                                </p>
+                                            }
+                                            @if (!string.IsNullOrEmpty(eventItem.ContactPerson))
+                                            {
+                                                <p class="mb-2">
+                                                    <i class="fas fa-user me-2 text-success"></i>
+                                                    <strong>Contact:</strong> @eventItem.ContactPerson
+                                                </p>
+                                            }
+                                            @if (!string.IsNullOrEmpty(eventItem.ContactNumber))
+                                            {
+                                                <p class="mb-0">
+                                                    <i class="fas fa-phone me-2 text-success"></i>
+                                                    <strong>Phone:</strong>
+                                                    <a href="tel:@eventItem.ContactNumber" class="text-decoration-none">@eventItem.ContactNumber</a>
+                                                </p>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        @{
+                                            var daysUntil = (eventItem.EventDate - DateTime.Now).Days;
+                                            if (daysUntil == 0)
+                                            {
+                                                <span class="badge-today">📅 Today</span>
+                                            }
+                                            else if (daysUntil == 1)
+                                            {
+                                                <span class="badge-tomorrow">⏰ Tomorrow</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge-upcoming">📌 In @daysUntil days</span>
+                                            }
+                                        }
+                                    </div>
+                                    <div>
+                                        <!-- Edit button commented out as in original -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="no-events">
+                <i class="fas fa-calendar-plus fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted mb-3">No Upcoming Events</h4>
+                <p class="text-muted mb-0">Check back later for upcoming events in our village.</p>
+            </div>
+        }
+    </div>
+
+    <!-- Past Events -->
+    @if (Model.PastEvents.Any())
+    {
+        <div class="mb-4">
+            <h2 class="section-title">
+                <i class="fas fa-history me-2"></i>Past Events
+            </h2>
+            <div class="row">
+                @foreach (var eventItem in Model.PastEvents)
+                {
+                    <div class="col-12 col-lg-6 mb-3">
+                        <div class="card event-card past-event-card h-100">
+                            <div class="card-header text-white">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-history me-2"></i>@eventItem.Title
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                @if (!string.IsNullOrEmpty(eventItem.Description))
+                                {
+                                    <p class="card-text mb-3">@eventItem.Description</p>
+                                }
+                                <p class="card-text mb-2">
+                                    <i class="fas fa-calendar me-2 text-muted"></i>
+                                    <strong>Held on:</strong> @eventItem.EventDate.ToString("MMMM dd, yyyy")
+                                </p>
+                                @if (!string.IsNullOrEmpty(eventItem.Location))
+                                {
+                                    <p class="card-text mb-0">
+                                        <i class="fas fa-map-marker-alt me-2 text-muted"></i>
+                                        <strong>Location:</strong> @eventItem.Location
+                                    </p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,0 +1,225 @@
+﻿@page
+@model Korlavalasa.Pages.Admin.AdminNews.EditModel
+@{
+    ViewData["Title"] = "Edit News";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="d-flex align-items-center mb-4">
+                <a asp-page="Index" class="btn btn-outline-secondary btn-sm me-3">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <div>
+                    <h2 class="text-success mb-1">
+                        <i class="fas fa-edit me-2"></i>Edit News Article
+                    </h2>
+                    <p class="text-muted mb-0">Update the news article information</p>
+                </div>
+            </div>
+
+            <!-- Success Message -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-newspaper me-2"></i>News Details
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" id="newsForm">
+                        <input type="hidden" asp-for="News.Id" />
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <!-- Title Field -->
+                        <div class="mb-4">
+                            <label asp-for="News.Title" class="form-label fw-semibold">
+                                <i class="fas fa-heading me-2 text-primary"></i>Title *
+                            </label>
+                            <input asp-for="News.Title" class="form-control form-control-lg"
+                                   placeholder="Enter news title in English or Telugu" />
+                            <span asp-validation-for="News.Title" class="text-danger small"></span>
+                            <div class="form-text text-muted">
+                                <i class="fas fa-language me-1"></i>Supports both English and Telugu content
+                            </div>
+                        </div>
+
+                        <!-- Content Field -->
+                        <div class="mb-4">
+                            <label asp-for="News.Content" class="form-label fw-semibold">
+                                <i class="fas fa-align-left me-2 text-primary"></i>Content *
+                            </label>
+                            <textarea asp-for="News.Content" class="form-control" rows="8"
+                                      placeholder="Write your news content in English or Telugu..."></textarea>
+                            <span asp-validation-for="News.Content" class="text-danger small"></span>
+                            <div class="form-text text-muted">
+                                <i class="fas fa-language me-1"></i>You can type in Telugu using any Telugu keyboard
+                            </div>
+                        </div>
+
+                        <!-- Image URL Field -->
+                        <div class="mb-4">
+                            <label asp-for="News.ImageUrl" class="form-label fw-semibold">
+                                <i class="fas fa-image me-2 text-primary"></i>Image URL
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">
+                                    <i class="fas fa-link text-muted"></i>
+                                </span>
+                                <input asp-for="News.ImageUrl" class="form-control"
+                                       placeholder="https://example.com/image.jpg" />
+                            </div>
+                            <span asp-validation-for="News.ImageUrl" class="text-danger small"></span>
+                            <div class="form-text text-muted">
+                                <i class="fas fa-info-circle me-1"></i>Optional: Provide a direct image URL
+                            </div>
+
+                            <!-- Image Preview -->
+                            @if (!string.IsNullOrEmpty(Model.News.ImageUrl))
+                            {
+                                <div class="mt-2">
+                                    <label class="form-label fw-semibold">Current Image:</label>
+                                    <div class="border rounded p-2 bg-light">
+                                        <img src="@Model.News.ImageUrl" alt="News image"
+                                             class="img-fluid rounded" style="max-height: 200px;"
+                                             onerror="this.style.display='none'" />
+                                        <div class="mt-2">
+                                            <small class="text-muted">
+                                                <i class="fas fa-external-link-alt me-1"></i>
+                                                <a href="@Model.News.ImageUrl" target="_blank" class="text-decoration-none">
+                                                    View Full Image
+                                                </a>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Published Date Field -->
+                        <div class="mb-4">
+                            <label asp-for="News.PublishedDate" class="form-label fw-semibold">
+                                <i class="fas fa-calendar me-2 text-primary"></i>Published Date *
+                            </label>
+                            <input asp-for="News.PublishedDate" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="News.PublishedDate" class="text-danger small"></span>
+                            <div class="form-text text-muted">
+                                <i class="fas fa-info-circle me-1"></i>Date when this news was published
+                            </div>
+                        </div>
+
+                        <!-- Publish Options -->
+                        <div class="mb-4">
+                            <div class="card bg-light border-0">
+                                <div class="card-body">
+                                    <div class="form-check form-switch">
+                                        <input asp-for="News.IsActive" class="form-check-input" type="checkbox"
+                                               role="switch" id="publishSwitch">
+                                        <label class="form-check-label fw-semibold" for="publishSwitch">
+                                            <i class="fas fa-globe me-2 text-primary"></i>Published
+                                        </label>
+                                    </div>
+                                    <small class="text-muted">
+                                        When enabled, the news will be visible to all visitors
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                            <a asp-page="Index" class="btn btn-outline-secondary px-4">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                            <div>
+                                <a asp-page="Delete" asp-route-id="@Model.News.Id" class="btn btn-outline-danger me-2">
+                                    <i class="fas fa-trash me-2"></i>Delete
+                                </a>
+                                <button type="submit" class="btn btn-primary px-5 py-2 fw-semibold">
+                                    <i class="fas fa-save me-2"></i>Update News
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Telugu Typing Help -->
+            <div class="card bg-light border-0 mt-4">
+                <div class="card-body">
+                    <h6 class="card-title text-primary mb-3">
+                        <i class="fas fa-keyboard me-2"></i>Typing in Telugu
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>On Mobile:</strong></p>
+                            <ul class="list-unstyled small">
+                                <li><i class="fas fa-check text-primary me-2"></i>Use Gboard or any Telugu keyboard</li>
+                                <li><i class="fas fa-check text-primary me-2"></i>Switch to Telugu in keyboard settings</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>On Laptop:</strong></p>
+                            <ul class="list-unstyled small">
+                                <li><i class="fas fa-check text-primary me-2"></i>Use Google Input Tools extension</li>
+                                <li><i class="fas fa-check text-primary me-2"></i>Enable Telugu in Windows/Mac language settings</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Auto-focus on title field
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('News_Title').focus();
+
+            // Format the datetime-local input
+            const publishedDateInput = document.querySelector('input[asp-for="News.PublishedDate"]');
+            if (publishedDateInput && publishedDateInput.value) {
+                const date = new Date(publishedDateInput.value);
+                const timezoneOffset = date.getTimezoneOffset() * 60000;
+                const localISOTime = new Date(date - timezoneOffset).toISOString().slice(0, 16);
+                publishedDateInput.value = localISOTime;
+            }
+        });
+
+        // Character counter for title
+        const titleInput = document.getElementById('News_Title');
+        const titleCounter = document.createElement('div');
+        titleCounter.className = 'form-text text-end text-muted small';
+        titleInput.parentNode.appendChild(titleCounter);
+
+        // Initialize counter with current value
+        const initialCount = titleInput.value.length;
+        titleCounter.textContent = `${initialCount}/200 characters`;
+        if (initialCount > 190) {
+            titleCounter.className = 'form-text text-end text-danger small';
+        }
+
+        titleInput.addEventListener('input', function() {
+            const count = this.value.length;
+            titleCounter.textContent = `${count}/200 characters`;
+            if (count > 190) {
+                titleCounter.className = 'form-text text-end text-danger small';
+            } else {
+                titleCounter.className = 'form-text text-end text-muted small';
+            }
+        });
+    </script>
+}

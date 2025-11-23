@@ -1,0 +1,48 @@
+﻿@page
+@model Korlavalasa.Pages.Admin.IndexModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container admin-dashboard">
+    <h1 class="text-center mb-4 page-title">Admin Dashboard</h1>
+
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="admin-card bg-primary">
+                <div class="card-body">
+                    <h3>@Model.NewsCount</h3>
+                    <p>News Articles</p>
+                    <a href="/Admin/AdminNews" class="btn btn-light btn-sm">Manage</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="admin-card bg-success">
+                <div class="card-body">
+                    <h3>@Model.EventCount</h3>
+                    <p>Events</p>
+                    <a href="/Admin/Events" class="btn btn-light btn-sm">Manage</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="admin-card bg-warning">
+                <div class="card-body">
+                    <h3>@Model.GalleryCount</h3>
+                    <p>Gallery Images</p>
+                    <a href="/Admin/Gallery" class="btn btn-light btn-sm">Manage</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="admin-card bg-info">
+                <div class="card-body">
+                    <h3>@Model.VillageInfo.Population</h3>
+                    <p>Population</p>
+                    <a href="/Admin/VillageInfo" class="btn btn-light btn-sm">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

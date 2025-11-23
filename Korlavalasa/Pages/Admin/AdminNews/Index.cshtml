@@ -1,0 +1,89 @@
+﻿@page
+@model Korlavalasa.Pages.Admin.AdminNews.IndexModel
+@{
+    ViewData["Title"] = "Manage News";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-success">
+            <i class="fas fa-newspaper me-2"></i>Manage News
+        </h1>
+        <a asp-page="Create" class="btn btn-success">
+            <i class="fas fa-plus me-2"></i>Add New News
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model.NewsItems.Any())
+    {
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Title</th>
+                                <th>Published Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var news in Model.NewsItems)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@news.Title</strong>
+                                        @if (!string.IsNullOrEmpty(news.ImageUrl))
+                                        {
+                                            <br>
+                                
+                                            <small class="text-muted"><i class="fas fa-image me-1"></i>Has Image</small>
+                                        }
+                                    </td>
+                                    <td>@news.PublishedDate.ToString("MMM dd, yyyy")</td>
+                                    <td>
+                                        <span class="badge @(news.IsActive ? "bg-success" : "bg-secondary")">
+                                            @(news.IsActive ? "Active" : "Inactive")
+                                        </span>
+                                    </td>
+                                    <td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a asp-page="Edit" asp-route-id="@news.Id" class="btn btn-outline-primary" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-page="Delete" asp-route-id="@news.Id" class="btn btn-outline-danger" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-newspaper fa-4x text-muted mb-4"></i>
+            <h3 class="text-muted">No News Articles</h3>
+            <p class="text-muted">Get started by creating your first news article.</p>
+            <a asp-page="Create" class="btn btn-success btn-lg">
+                <i class="fas fa-plus me-2"></i>Create First News
+            </a>
+        </div>
+    }
+</div>

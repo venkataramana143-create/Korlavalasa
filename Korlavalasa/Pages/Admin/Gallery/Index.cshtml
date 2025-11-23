@@ -1,0 +1,125 @@
+﻿@page
+@model Korlavalasa.Pages.Admin.Gallery.IndexModel
+@{
+    ViewData["Title"] = "Manage Gallery";
+}
+
+<div class="container mt-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h1 class="page-title mb-1">
+                <i class="fas fa-images me-2"></i>Manage Gallery
+            </h1>
+            <p class="text-muted mb-0">Upload and manage gallery images for your village</p>
+        </div>
+        <a asp-page="Create" class="btn btn-success btn-form">
+            <i class="fas fa-plus me-2"></i>Upload New Image
+        </a>
+    </div>
+
+    <!-- Messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-admin alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-admin alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>@TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model.GalleryImages.Any())
+    {
+        <!-- Gallery Stats -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body py-3">
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <h4 class="text-success mb-1">@Model.GalleryImages.Count</h4>
+                                <small class="text-muted">Total Images</small>
+                            </div>
+                            <div class="col-md-3">
+                                <h4 class="text-primary mb-1">@Model.GalleryImages.Count(i => i.Category == "Temple")</h4>
+                                <small class="text-muted">Temple Photos</small>
+                            </div>
+                            <div class="col-md-3">
+                                <h4 class="text-warning mb-1">@Model.GalleryImages.Count(i => i.Category == "Festival")</h4>
+                                <small class="text-muted">Festival Photos</small>
+                            </div>
+                            <div class="col-md-3">
+                                <h4 class="text-info mb-1">@Model.GalleryImages.Count(i => i.Category == "Nature")</h4>
+                                <small class="text-muted">Nature Photos</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="gallery-management-grid">
+            @foreach (var image in Model.GalleryImages)
+            {
+                <div class="gallery-item-card">
+                    <div class="position-relative">
+                        <img src="@image.ImagePath" class="gallery-item-image" alt="@image.Title"
+                             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbWFnZSBVbmF2YWlsYWJsZTwvdGV4dD48L3N2Zz4='">
+                        <span class="gallery-item-badge">@image.Category</span>
+                    </div>
+                    <div class="gallery-item-content">
+                        <h5 class="gallery-item-title">@image.Title</h5>
+                        @if (!string.IsNullOrEmpty(image.Description))
+                        {
+                            <p class="gallery-item-description">@image.Description</p>
+                        }
+                        <div class="gallery-item-meta">
+                            <span><i class="fas fa-calendar me-1"></i>@image.UploadDate.ToString("MMM dd, yyyy")</span>
+                            <span><i class="fas fa-clock me-1"></i>@image.UploadDate.ToString("hh:mm tt")</span>
+                        </div>
+                        <div class="gallery-item-actions">
+                            <a asp-page="Delete" asp-route-id="@image.Id" class="btn-gallery-action btn-gallery-delete">
+                                <i class="fas fa-trash me-1"></i>Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <!-- Empty State -->
+        <div class="empty-gallery-state">
+            <i class="fas fa-images empty-gallery-icon"></i>
+            <h3 class="text-muted mb-3">No Images in Gallery</h3>
+            <p class="text-muted mb-4">Get started by uploading your first image to showcase your village.</p>
+            <a asp-page="Create" class="btn btn-success btn-lg">
+                <i class="fas fa-cloud-upload-alt me-2"></i>Upload First Image
+            </a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-dismiss alerts
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }, 5000);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,430 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Welcome to Korlavalasa";
+}
+
+<!-- Enhanced Hero Section -->
+<section class="hero-section" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/temples/ourvillageshivayalam.jpeg'); background-size: cover; background-position: center; background-attachment: fixed; min-height: 100vh; display: flex; align-items: center;">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-12 col-md-10 col-lg-8">
+                <div class="hero-content">
+                    <!-- Village Badge -->
+                    <div class="village-badge mb-4">
+                        <span class="badge bg-warning text-dark px-3 py-2 fs-6">
+                            <i class="fas fa-star me-2"></i>Pride of Andhra Pradesh
+                        </span>
+                    </div>
+
+                    <h1 class="hero-title display-4 fw-bold text-white mb-4">
+                        Welcome to <span class="text-warning">Korlavalasa</span>
+                    </h1>
+
+                    <p class="hero-subtitle lead text-white mb-5">
+                        Home of Ancient Temples and Rich Cultural Heritage
+                    </p>
+
+                    <div class="hero-actions">
+                        <a href="/About" class="btn btn-warning btn-lg rounded-pill px-4 py-3 me-3 mb-3">
+                            <i class="fas fa-compass me-2"></i>Discover Village
+                        </a>
+                        <a href="/Gallery" class="btn btn-outline-light btn-lg rounded-pill px-4 py-3 mb-3">
+                            <i class="fas fa-images me-2"></i>View Gallery
+                        </a>
+                    </div>
+
+                    <!-- Scroll Indicator -->
+                    <div class="scroll-indicator mt-5">
+                        <div class="scroll-arrow"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Village Statistics -->
+<section class="village-stats py-5 bg-light">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-6 col-md-3">
+                <div class="stat-card text-center p-3">
+                    <div class="stat-icon mb-3">
+                        <i class="fas fa-users fa-2x text-success"></i>
+                    </div>
+                    <h3 class="stat-number text-success fw-bold mb-2">@Model.VillageInfo.Population</h3>
+                    <p class="stat-label fw-semibold text-muted mb-0">Proud Residents</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card text-center p-3">
+                    <div class="stat-icon mb-3">
+                        <i class="fas fa-map-marked-alt fa-2x text-success"></i>
+                    </div>
+                    <h3 class="stat-number text-success fw-bold mb-2">@Model.VillageInfo.Area</h3>
+                    <p class="stat-label fw-semibold text-muted mb-0">Square Kilometers</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card text-center p-3">
+                    <div class="stat-icon mb-3">
+                        <i class="fas fa-history fa-2x text-success"></i>
+                    </div>
+                    <h3 class="stat-number text-success fw-bold mb-2">200+</h3>
+                    <p class="stat-label fw-semibold text-muted mb-0">Years of History</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card text-center p-3">
+                    <div class="stat-icon mb-3">
+                        <i class="fas fa-seedling fa-2x text-success"></i>
+                    </div>
+                    <h3 class="stat-number text-success fw-bold mb-2">@Model.MainCropsCount</h3>
+                    <p class="stat-label fw-semibold text-muted mb-0">Main Crops</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Info Cards Section -->
+<section class="info-cards py-5">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Weather Widget -->
+            <div class="col-md-6">
+                <div class="info-card weather-widget h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-cloud-sun me-2"></i>Today's Weather
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="weather-content">
+                            <div class="weather-main text-center mb-4">
+                                <div class="weather-icon mb-3">
+                                    <i class="fas fa-sun fa-3x text-warning"></i>
+                                </div>
+                                <h3 class="weather-temp">28°C</h3>
+                                <p class="weather-desc text-muted">Sunny</p>
+                            </div>
+                            <div class="weather-details row text-center">
+                                <div class="col-4">
+                                    <i class="fas fa-tint text-info mb-2"></i>
+                                    <p class="mb-1 fw-bold">65%</p>
+                                    <small class="text-muted">Humidity</small>
+                                </div>
+                                <div class="col-4">
+                                    <i class="fas fa-wind text-info mb-2"></i>
+                                    <p class="mb-1 fw-bold">12 km/h</p>
+                                    <small class="text-muted">Wind</small>
+                                </div>
+                                <div class="col-4">
+                                    <i class="fas fa-eye text-info mb-2"></i>
+                                    <p class="mb-1 fw-bold">10 km</p>
+                                    <small class="text-muted">Visibility</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Contacts -->
+            <div class="col-md-6">
+                <div class="info-card emergency-contact h-100">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Emergency Contacts
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="emergency-list">
+                            <div class="emergency-item d-flex align-items-center mb-3">
+                                <div class="emergency-icon me-3">
+                                    <i class="fas fa-police-box fa-2x text-danger"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 fw-bold">Police</h6>
+                                    <p class="mb-0 text-muted">100</p>
+                                </div>
+                            </div>
+                            <div class="emergency-item d-flex align-items-center mb-3">
+                                <div class="emergency-icon me-3">
+                                    <i class="fas fa-ambulance fa-2x text-danger"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 fw-bold">Ambulance</h6>
+                                    <p class="mb-0 text-muted">108</p>
+                                </div>
+                            </div>
+                            <div class="emergency-item d-flex align-items-center mb-3">
+                                <div class="emergency-icon me-3">
+                                    <i class="fas fa-fire-extinguisher fa-2x text-danger"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 fw-bold">Fire Station</h6>
+                                    <p class="mb-0 text-muted">101</p>
+                                </div>
+                            </div>
+                            <div class="emergency-item d-flex align-items-center">
+                                <div class="emergency-icon me-3">
+                                    <i class="fas fa-phone fa-2x text-danger"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 fw-bold">Sarpanch</h6>
+                                    <p class="mb-0 text-muted">@Model.VillageInfo.ContactNumber</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Latest News Section -->
+<section class="latest-news py-5 bg-light">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <h2 class="section-title text-success fw-bold">
+                <i class="fas fa-newspaper me-3"></i>Latest News
+            </h2>
+            <p class="section-subtitle text-muted">Stay updated with village news and announcements</p>
+        </div>
+
+        @if (Model.NewsItems.Any())
+        {
+            <div class="row g-4">
+                @foreach (var news in Model.NewsItems)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="news-card card h-100 border-0 shadow-sm">
+                            @if (!string.IsNullOrEmpty(news.ImageUrl))
+                            {
+                                <div class="news-image">
+                                    <img src="@news.ImageUrl" class="card-img-top" alt="@news.Title" style="height: 200px; object-fit: cover;">
+                                </div>
+                            }
+                            <div class="card-body">
+                                <div class="news-meta d-flex justify-content-between align-items-center mb-3">
+                                    <span class="badge bg-success">News</span>
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>
+                                        @news.PublishedDate.ToString("MMM dd, yyyy")
+                                    </small>
+                                </div>
+                                <h5 class="news-title card-title fw-bold">@news.Title</h5>
+                                <p class="news-content card-text text-muted">@news.Content</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="/NewsUI" class="btn btn-outline-success btn-lg rounded-pill px-5">
+                    <i class="fas fa-newspaper me-2"></i>View All News
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-newspaper fa-4x text-muted mb-4"></i>
+                <h4 class="text-muted">No News Available</h4>
+                <p class="text-muted">Check back later for updates</p>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Upcoming Events Section -->
+<section class="upcoming-events py-5">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <h2 class="section-title text-success fw-bold">
+                <i class="fas fa-calendar-alt me-3"></i>Upcoming Events
+            </h2>
+            <p class="section-subtitle text-muted">Join us in our community celebrations and activities</p>
+        </div>
+
+        @if (Model.UpcomingEvents.Any())
+        {
+            <div class="row g-4">
+                @foreach (var eventItem in Model.UpcomingEvents)
+                {
+                    <div class="col-lg-6">
+                        <div class="event-card card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="event-header d-flex justify-content-between align-items-start mb-3">
+                                    <h5 class="event-title card-title fw-bold text-success">@eventItem.Title</h5>
+                                    <div class="event-date text-end">
+                                        <div class="date-badge bg-success text-white rounded-pill px-3 py-1">
+                                            <small class="fw-bold">
+                                                <i class="fas fa-calendar me-1"></i>
+                                                @eventItem.EventDate.ToString("MMM dd")
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p class="event-description card-text text-muted mb-4">@eventItem.Description</p>
+
+                                <div class="event-details">
+                                    <div class="detail-item d-flex align-items-center mb-2">
+                                        <i class="fas fa-clock text-success me-3"></i>
+                                        <div>
+                                            <small class="text-muted">Time</small>
+                                            <p class="mb-0 fw-semibold">@eventItem.EventDate.ToString("hh:mm tt")</p>
+                                        </div>
+                                    </div>
+
+                                    @if (!string.IsNullOrEmpty(eventItem.Location))
+                                    {
+                                        <div class="detail-item d-flex align-items-center mb-2">
+                                            <i class="fas fa-map-marker-alt text-success me-3"></i>
+                                            <div>
+                                                <small class="text-muted">Location</small>
+                                                <p class="mb-0 fw-semibold">@eventItem.Location</p>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    @if (!string.IsNullOrEmpty(eventItem.ContactPerson))
+                                    {
+                                        <div class="detail-item d-flex align-items-center">
+                                            <i class="fas fa-user text-success me-3"></i>
+                                            <div>
+                                                <small class="text-muted">Contact Person</small>
+                                                <p class="mb-0 fw-semibold">@eventItem.ContactPerson</p>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="/Events" class="btn btn-outline-success btn-lg rounded-pill px-5">
+                    <i class="fas fa-calendar me-2"></i>View All Events
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-calendar fa-4x text-muted mb-4"></i>
+                <h4 class="text-muted">No Upcoming Events</h4>
+                <p class="text-muted">Stay tuned for future events</p>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Quick Links Section -->
+<section class="quick-links py-5 bg-light">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <h2 class="section-title text-success fw-bold">Explore Korlavalasa</h2>
+            <p class="section-subtitle text-muted">Discover the beauty and culture of our village</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <a href="/About" class="card feature-card text-decoration-none h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-history fa-3x text-success"></i>
+                        </div>
+                        <h5 class="feature-title fw-bold text-dark mb-3">Our Heritage</h5>
+                        <p class="feature-description text-muted">
+                            Discover 200+ years of rich history, ancient temples, and traditional culture
+                        </p>
+                        <div class="feature-arrow mt-3">
+                            <i class="fas fa-arrow-right text-success"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="/Gallery" class="card feature-card text-decoration-none h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-images fa-3x text-success"></i>
+                        </div>
+                        <h5 class="feature-title fw-bold text-dark mb-3">Photo Gallery</h5>
+                        <p class="feature-description text-muted">
+                            Explore beautiful images capturing village life, festivals, and scenic landscapes
+                        </p>
+                        <div class="feature-arrow mt-3">
+                            <i class="fas fa-arrow-right text-success"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="/Contact" class="card feature-card text-decoration-none h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-handshake fa-3x text-success"></i>
+                        </div>
+                        <h5 class="feature-title fw-bold text-dark mb-3">Get In Touch</h5>
+                        <p class="feature-description text-muted">
+                            Connect with village administration, community leaders, and fellow residents
+                        </p>
+                        <div class="feature-arrow mt-3">
+                            <i class="fas fa-arrow-right text-success"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+ 
+
+@section Scripts {
+    <script>
+        // Add smooth scrolling for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add loading animation to cards
+            const cards = document.querySelectorAll('.news-card, .event-card, .feature-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            // Add intersection observer for fade-in animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all animated elements
+            const animatedElements = document.querySelectorAll('.news-card, .event-card, .feature-card, .stat-card');
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+}

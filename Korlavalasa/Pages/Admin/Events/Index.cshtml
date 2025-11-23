@@ -1,0 +1,141 @@
+﻿@page
+@model Korlavalasa.Pages.Admin.Events.IndexModel
+@{
+    ViewData["Title"] = "Manage Events";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-success">
+            <i class="fas fa-calendar-alt me-2"></i>Manage Events
+        </h1>
+        <a asp-page="Create" class="btn btn-success">
+            <i class="fas fa-plus me-2"></i>Add New Event
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Upcoming Events -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-rocket me-2"></i>Upcoming Events (@Model.UpcomingEvents.Count)
+            </h5>
+        </div>
+        <div class="card-body">
+            @if (Model.UpcomingEvents.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Event Title</th>
+                                <th>Date & Time</th>
+                                <th>Location</th>
+                                <th>Contact Person</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var eventItem in Model.UpcomingEvents)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@eventItem.Title</strong>
+                                        @if (!string.IsNullOrEmpty(eventItem.Description))
+                                        {
+                                            <br>
+                                            <small class="text-muted">
+                                                @(eventItem.Description.Length > 50 ? eventItem.Description.Substring(0, 50) + "..." : eventItem.Description)
+                                            </small>
+                                        }
+                                    </td>
+                                    <td>@eventItem.EventDate.ToString("MMM dd, yyyy hh:mm tt")</td>
+                                    <td>@eventItem.Location</td>
+                                    <td>@eventItem.ContactPerson</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a asp-page="Edit" asp-route-id="@eventItem.Id" class="btn btn-outline-primary">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-page="Delete" asp-route-id="@eventItem.Id" class="btn btn-outline-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-4">
+                    <i class="fas fa-calendar-plus fa-2x text-muted mb-3"></i>
+                    <p class="text-muted">No upcoming events scheduled.</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Past Events -->
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-history me-2"></i>Past Events (@Model.PastEvents.Count)
+            </h5>
+        </div>
+        <div class="card-body">
+            @if (Model.PastEvents.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Event Title</th>
+                                <th>Date</th>
+                                <th>Location</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var eventItem in Model.PastEvents)
+                            {
+                                <tr>
+                                    <td>@eventItem.Title</td>
+                                    <td>@eventItem.EventDate.ToString("MMM dd, yyyy")</td>
+                                    <td>@eventItem.Location</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a asp-page="Edit" asp-route-id="@eventItem.Id" class="btn btn-outline-primary">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-page="Delete" asp-route-id="@eventItem.Id" class="btn btn-outline-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-4">
+                    <i class="fas fa-history fa-2x text-muted mb-3"></i>
+                    <p class="text-muted">No past events recorded.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

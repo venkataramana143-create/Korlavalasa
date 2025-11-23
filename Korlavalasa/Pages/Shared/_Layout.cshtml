@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Korlavalasa Village</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" asp-page="/Index">
+                    <i class="fas fa-tree me-2"></i>
+                    <strong>Korlavalasa Village</strong>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Index">
+                                <i class="fas fa-home me-1"></i>Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/About">
+                                <i class="fas fa-info-circle me-1"></i>About
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/NewsUI/Index">
+                                <i class="fas fa-newspaper me-1"></i>News
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Events/Index">
+                                <i class="fas fa-calendar-alt me-1"></i>Events
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Gallery">
+                                <i class="fas fa-images me-1"></i>Gallery
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Contact">
+                                <i class="fas fa-envelope me-1"></i>Contact
+                            </a>
+                        </li>
+                        <!-- Admin Section - Dynamic based on login status -->
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-warning" href="#" role="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-user-shield me-1"></i>Admin
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-page="/Admin/Index"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-page="/Admin/AdminNews/Index"><i class="fas fa-newspaper me-2"></i>Manage News</a></li>
+                                    <li><a class="dropdown-item" asp-page="/Admin/Events/Index"><i class="fas fa-calendar-alt me-2"></i>Manage Events</a></li>
+                                    <li><a class="dropdown-item" asp-page="/Admin/Gallery/Index"><i class="fas fa-images me-2"></i>Manage Gallery</a></li>
+                                    <li><a class="dropdown-item" asp-page="/Admin/VillageInfo"><i class="fas fa-edit me-2"></i>Edit Village Info</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <!-- Logout confirmation link -->
+                                        <a class="dropdown-item text-danger" asp-page="/Admin/Logout">
+                                            <i class="fas fa-sign-out-alt me-2"></i>Logout (@User.Identity.Name)
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-warning" asp-page="/Admin/Login">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Admin Login
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Korlavalasa Village</h5>
+                    <p>Pride of Andhra Pradesh - Rich in Heritage, Strong in Community</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p>&copy; 2024 Korlavalasa Village. All rights reserved.</p>
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

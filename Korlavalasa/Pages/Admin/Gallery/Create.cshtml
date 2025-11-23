@@ -1,0 +1,264 @@
+﻿@page
+@model Korlavalasa.Pages.Admin.Gallery.CreateModel
+@{
+    ViewData["Title"] = "Upload Gallery Images";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card gallery-admin-card">
+                <div class="card-header text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-cloud-upload-alt me-2"></i>Upload Gallery Images
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Success Message -->
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-admin alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <!-- Error Message -->
+                    @if (ViewData["Error"] != null)
+                    {
+                        <div class="alert alert-danger alert-admin alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>@ViewData["Error"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form method="post" enctype="multipart/form-data" id="uploadForm">
+                        <div class="mb-4">
+                            <label class="form-label">Category for All Images *</label>
+                            <select asp-for="GalleryImage.Category" class="form-select @(ViewData.ModelState["GalleryImage.Category"]?.Errors?.Count > 0 ? "is-invalid" : "")" id="categorySelect">
+                                <option value="">Select Category</option>
+                                <option value="Temple">🏛️ Temple</option>
+                                <option value="Festival">🎉 Festival</option>
+                                <option value="Agriculture">🌾 Agriculture</option>
+                                <option value="Development">🏗️ Development</option>
+                                <option value="Nature">🌳 Nature</option>
+                                <option value="General">📷 General</option>
+                            </select>
+                            <span asp-validation-for="GalleryImage.Category" class="text-danger"></span>
+                            <div class="form-text">This category will be applied to all selected images</div>
+                        </div>
+
+                        <!-- Drag & Drop Upload Area -->
+                        <div class="mb-4">
+                            <label class="form-label">Select Images *</label>
+                            <div class="gallery-upload-area" id="uploadArea">
+                                <input type="file" class="file-input-hidden"
+                                       name="files" id="imageFilesInput" multiple
+                                       accept=".jpg,.jpeg,.png,.gif,.webp">
+                                <div class="upload-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                                <h5 class="text-success mb-2">Drop images here or click to browse</h5>
+                                <p class="text-muted mb-3">Supports JPG, PNG, GIF, WebP • Max 5MB per file</p>
+                                <button type="button" class="btn btn-outline-success" onclick="document.getElementById('imageFilesInput').click()">
+                                    <i class="fas fa-folder-open me-2"></i>Choose Files
+                                </button>
+                            </div>
+
+                            <!-- Selected Files Panel -->
+                            <div id="selectedFiles" class="selected-files-panel d-none">
+                                <h6 class="text-success mb-3">
+                                    <i class="fas fa-file-image me-2"></i>
+                                    Selected Files (<span id="fileCount">0</span>)
+                                </h6>
+                                <div id="fileList" class="mb-3"></div>
+
+                                <!-- Progress Bar -->
+                                <div class="upload-progress d-none" id="uploadProgress">
+                                    <div class="upload-progress-bar" id="uploadProgressBar"></div>
+                                </div>
+
+                                <!-- Image Previews -->
+                                <h6 class="text-success mb-3">
+                                    <i class="fas fa-eye me-2"></i>
+                                    Image Previews
+                                </h6>
+                                <div id="imagePreviews" class="image-previews-grid"></div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between flex-wrap gap-3">
+                            <a asp-page="Index" class="btn btn-secondary btn-form">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Gallery
+                            </a>
+                            <button type="submit" class="btn btn-success btn-form" id="submitBtn" disabled>
+                                <i class="fas fa-upload me-2"></i>
+                                Upload <span id="uploadCount">0</span> Image(s)
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Enhanced JavaScript for Create.cshtml
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadArea = document.getElementById('uploadArea');
+            const imageFilesInput = document.getElementById('imageFilesInput');
+            const fileList = document.getElementById('fileList');
+            const fileCount = document.getElementById('fileCount');
+            const uploadCount = document.getElementById('uploadCount');
+            const imagePreviews = document.getElementById('imagePreviews');
+            const submitBtn = document.getElementById('submitBtn');
+            const selectedFiles = document.getElementById('selectedFiles');
+            const uploadProgress = document.getElementById('uploadProgress');
+            const uploadProgressBar = document.getElementById('uploadProgressBar');
+
+            let selectedFilesData = [];
+
+            // Drag and drop functionality
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight() {
+                uploadArea.classList.add('dragover');
+            }
+
+            function unhighlight() {
+                uploadArea.classList.remove('dragover');
+            }
+
+            uploadArea.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFiles(files);
+            }
+
+            // File input change
+            imageFilesInput.addEventListener('change', function() {
+                handleFiles(this.files);
+            });
+
+            function handleFiles(files) {
+                const validFiles = validateFiles(Array.from(files));
+                if (validFiles.length > 0) {
+                    selectedFilesData = validFiles;
+                    displaySelectedFiles(validFiles);
+                    displayImagePreviews(validFiles);
+                    selectedFiles.classList.remove('d-none');
+                    updateFileCount(validFiles.length);
+                }
+            }
+
+            function validateFiles(files) {
+                return files.filter(file => {
+                    const isValidType = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'].includes(file.type);
+                    const isValidSize = file.size <= 5 * 1024 * 1024;
+                    return isValidType && isValidSize;
+                });
+            }
+
+            function displaySelectedFiles(files) {
+                fileList.innerHTML = '';
+                files.forEach((file, index) => {
+                    const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-list-item';
+                    fileItem.innerHTML = `
+                        <div class="file-info">
+                            <i class="fas fa-file-image file-icon"></i>
+                            <div class="file-details">
+                                <div class="file-name">${file.name}</div>
+                                <div class="file-size">${fileSize} MB</div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-remove-file" onclick="removeFile(${index})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    fileList.appendChild(fileItem);
+                });
+            }
+
+            function displayImagePreviews(files) {
+                imagePreviews.innerHTML = '';
+                files.forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const previewCard = document.createElement('div');
+                        previewCard.className = 'preview-card';
+                        previewCard.innerHTML = `
+                            <img src="${e.target.result}" class="preview-img" alt="${file.name}">
+                            <div class="preview-info">
+                                <div class="preview-name">${file.name}</div>
+                                <div class="preview-size">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                            </div>
+                        `;
+                        imagePreviews.appendChild(previewCard);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            window.removeFile = function(index) {
+                selectedFilesData.splice(index, 1);
+                if (selectedFilesData.length > 0) {
+                    displaySelectedFiles(selectedFilesData);
+                    displayImagePreviews(selectedFilesData);
+                    updateFileCount(selectedFilesData.length);
+                } else {
+                    selectedFiles.classList.add('d-none');
+                    updateFileCount(0);
+                }
+            };
+
+            function updateFileCount(count) {
+                fileCount.textContent = count;
+                uploadCount.textContent = count;
+                submitBtn.disabled = count === 0;
+            }
+
+            // Form submission
+            document.getElementById('uploadForm').addEventListener('submit', function(e) {
+                if (selectedFilesData.length === 0) {
+                    e.preventDefault();
+                    alert('Please select at least one image to upload.');
+                    return;
+                }
+
+                // Show progress bar
+                uploadProgress.classList.remove('d-none');
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 10;
+                    uploadProgressBar.style.width = progress + '%';
+                    if (progress >= 90) clearInterval(interval);
+                }, 200);
+
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Uploading...';
+            });
+        });
+    </script>
+}

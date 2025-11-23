@@ -1,0 +1,291 @@
+﻿@page
+@model Korlavalasa.Pages.Admin.Events.EditModel
+@{
+    ViewData["Title"] = "Edit Event";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="d-flex align-items-center mb-4">
+                <a asp-page="Index" class="btn btn-outline-secondary btn-sm me-3">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <div>
+                    <h2 class="text-success mb-1">
+                        <i class="fas fa-edit me-2"></i>Edit Event
+                    </h2>
+                    <p class="text-muted mb-0">Update event details for the village community</p>
+                </div>
+            </div>
+
+            <!-- Success Message -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-success text-white py-3">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-calendar-alt me-2"></i>Event Details
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" id="eventForm">
+                        <input type="hidden" asp-for="Event.Id" />
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <!-- Title Field -->
+                        <div class="mb-4">
+                            <label asp-for="Event.Title" class="form-label fw-semibold">
+                                <i class="fas fa-heading me-2 text-success"></i>Event Title *
+                            </label>
+                            <input asp-for="Event.Title" class="form-control form-control-lg"
+                                   placeholder="Enter event title in English or Telugu" />
+                            <span asp-validation-for="Event.Title" class="text-danger small"></span>
+                            <div class="form-text text-muted">
+                                <i class="fas fa-language me-1"></i>Supports both English and Telugu content
+                            </div>
+                        </div>
+
+                        <!-- Description Field -->
+                        <div class="mb-4">
+                            <label asp-for="Event.Description" class="form-label fw-semibold">
+                                <i class="fas fa-align-left me-2 text-success"></i>Description
+                            </label>
+                            <textarea asp-for="Event.Description" class="form-control" rows="5"
+                                      placeholder="Describe the event details in English or Telugu..."></textarea>
+                            <span asp-validation-for="Event.Description" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Date & Time Fields -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="eventDate" class="form-label fw-semibold">
+                                        <i class="fas fa-calendar me-2 text-success"></i>Event Date *
+                                    </label>
+                                    <input type="date" id="eventDate" class="form-control"
+                                           min="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                                    <div class="form-text text-muted">Select the event date</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="eventTime" class="form-label fw-semibold">
+                                        <i class="fas fa-clock me-2 text-success"></i>Event Time *
+                                    </label>
+                                    <select id="eventTime" class="form-select" required>
+                                        <option value="">Select Time</option>
+                                        <option value="06:00">6:00 AM</option>
+                                        <option value="06:30">6:30 AM</option>
+                                        <option value="07:00">7:00 AM</option>
+                                        <option value="07:30">7:30 AM</option>
+                                        <option value="08:00">8:00 AM</option>
+                                        <option value="08:30">8:30 AM</option>
+                                        <option value="09:00">9:00 AM</option>
+                                        <option value="09:30">9:30 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="10:30">10:30 AM</option>
+                                        <option value="11:00">11:00 AM</option>
+                                        <option value="11:30">11:30 AM</option>
+                                        <option value="12:00">12:00 PM</option>
+                                        <option value="12:30">12:30 PM</option>
+                                        <option value="13:00">1:00 PM</option>
+                                        <option value="13:30">1:30 PM</option>
+                                        <option value="14:00">2:00 PM</option>
+                                        <option value="14:30">2:30 PM</option>
+                                        <option value="15:00">3:00 PM</option>
+                                        <option value="15:30">3:30 PM</option>
+                                        <option value="16:00">4:00 PM</option>
+                                        <option value="16:30">4:30 PM</option>
+                                        <option value="17:00">5:00 PM</option>
+                                        <option value="17:30">5:30 PM</option>
+                                        <option value="18:00">6:00 PM</option>
+                                        <option value="18:30">6:30 PM</option>
+                                        <option value="19:00">7:00 PM</option>
+                                        <option value="19:30">7:30 PM</option>
+                                        <option value="20:00">8:00 PM</option>
+                                        <option value="20:30">8:30 PM</option>
+                                    </select>
+                                    <div class="form-text text-muted">Select the event time</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hidden field for the actual DateTime -->
+                        <input type="hidden" asp-for="Event.EventDate" id="finalEventDate" />
+
+                        <!-- Location Field -->
+                        <div class="mb-4">
+                            <label asp-for="Event.Location" class="form-label fw-semibold">
+                                <i class="fas fa-map-marker-alt me-2 text-success"></i>Location
+                            </label>
+                            <input asp-for="Event.Location" class="form-control"
+                                   placeholder="Enter event venue or location" />
+                            <span asp-validation-for="Event.Location" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Event.ContactPerson" class="form-label fw-semibold">
+                                        <i class="fas fa-user me-2 text-success"></i>Contact Person
+                                    </label>
+                                    <input asp-for="Event.ContactPerson" class="form-control"
+                                           placeholder="Name of contact person" />
+                                    <span asp-validation-for="Event.ContactPerson" class="text-danger small"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Event.ContactNumber" class="form-label fw-semibold">
+                                        <i class="fas fa-phone me-2 text-success"></i>Contact Number
+                                    </label>
+                                    <input asp-for="Event.ContactNumber" class="form-control"
+                                           placeholder="Phone number for inquiries" />
+                                    <span asp-validation-for="Event.ContactNumber" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                            <a asp-page="Index" class="btn btn-outline-secondary px-4">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-success px-5 py-2 fw-semibold">
+                                <i class="fas fa-save me-2"></i>Update Event
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Telugu Typing Help -->
+            <div class="card bg-light border-0 mt-4">
+                <div class="card-body">
+                    <h6 class="card-title text-success mb-3">
+                        <i class="fas fa-keyboard me-2"></i>Typing in Telugu
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>On Mobile:</strong></p>
+                            <ul class="list-unstyled small">
+                                <li><i class="fas fa-check text-success me-2"></i>Use Gboard Telugu keyboard</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Download Telugu keyboard from Play Store/App Store</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>On Laptop:</strong></p>
+                            <ul class="list-unstyled small">
+                                <li><i class="fas fa-check text-success me-2"></i>Install Google Input Tools</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Use Windows Telugu keyboard layout</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-focus on title field
+            document.getElementById('Event_Title').focus();
+
+            // Get elements
+            const eventDateInput = document.getElementById('eventDate');
+            const eventTimeInput = document.getElementById('eventTime');
+            const finalEventDate = document.getElementById('finalEventDate');
+            const form = document.getElementById('eventForm');
+
+            // Parse the existing event date and populate the form
+            const existingDate = new Date('@Model.Event.EventDate.ToString("yyyy-MM-ddTHH:mm:ss")');
+
+            // Set the date field
+            eventDateInput.value = existingDate.toISOString().split('T')[0];
+
+            // Set the time field
+            const hours = existingDate.getHours().toString().padStart(2, '0');
+            const minutes = existingDate.getMinutes().toString().padStart(2, '0');
+            const timeString = `${hours}:${minutes}`;
+            eventTimeInput.value = timeString;
+
+            // Function to update the hidden DateTime field
+            function updateFinalDateTime() {
+                if (eventDateInput.value && eventTimeInput.value) {
+                    const dateString = eventDateInput.value;
+                    const timeString = eventTimeInput.value;
+
+                    // Combine date and time
+                    const dateTimeString = `${dateString}T${timeString}:00`;
+                    finalEventDate.value = dateTimeString;
+
+                    console.log('Final DateTime:', finalEventDate.value);
+                }
+            }
+
+            // Add event listeners
+            eventDateInput.addEventListener('change', updateFinalDateTime);
+            eventTimeInput.addEventListener('change', updateFinalDateTime);
+
+            // Initial update
+            updateFinalDateTime();
+
+            // Form validation
+            form.addEventListener('submit', function(e) {
+                updateFinalDateTime();
+
+                if (!eventDateInput.value || !eventTimeInput.value) {
+                    e.preventDefault();
+                    alert('Please select both date and time.');
+                    return false;
+                }
+
+                // Validate if date is in the future
+                const selectedDate = new Date(finalEventDate.value);
+                const now = new Date();
+
+                if (selectedDate <= now) {
+                    e.preventDefault();
+                    alert('Please select a future date and time.');
+                    return false;
+                }
+
+                return true;
+            });
+
+            // Character counter for title
+            const titleInput = document.getElementById('Event_Title');
+            const titleCounter = document.createElement('div');
+            titleCounter.className = 'form-text text-end text-muted small';
+            titleInput.parentNode.appendChild(titleCounter);
+
+            function updateTitleCounter() {
+                const count = titleInput.value.length;
+                titleCounter.textContent = `${count}/200 characters`;
+                if (count > 190) {
+                    titleCounter.className = 'form-text text-end text-danger small';
+                } else {
+                    titleCounter.className = 'form-text text-end text-muted small';
+                }
+            }
+
+            titleInput.addEventListener('input', updateTitleCounter);
+
+            // Initialize counter on page load
+            updateTitleCounter();
+        });
+    </script>
+}
