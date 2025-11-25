@@ -10,18 +10,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-// FIXED: Increase file upload limits for multiple files
+// Configure file upload limits
 builder.Services.Configure<IISServerOptions>(options =>
 {
-    options.MaxRequestBodySize = 50 * 1024 * 1024; // 50MB for multiple files
+    options.MaxRequestBodySize = 50 * 1024 * 1024; // 50MB
 });
 
 builder.Services.Configure<KestrelServerOptions>(options =>
 {
-    options.Limits.MaxRequestBodySize = 50 * 1024 * 1024; // 50MB for multiple files
+    options.Limits.MaxRequestBodySize = 50 * 1024 * 1024; // 50MB
 });
 
-// ADD THIS: Configure form options for file uploads
 builder.Services.Configure<FormOptions>(options =>
 {
     options.MultipartBodyLengthLimit = 50 * 1024 * 1024; // 50MB
@@ -30,20 +29,20 @@ builder.Services.Configure<FormOptions>(options =>
     options.MemoryBufferThreshold = int.MaxValue;
 });
 
-// Add DbContext with Identity
+// Database Configuration - Use SQL Server for all environments
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add Identity services - RELAXED PASSWORD REQUIREMENTS
+// Identity Configuration
 builder.Services.AddIdentity<AdminUser, IdentityRole>(options =>
 {
-    // ✅ RELAXED Password settings
-    options.Password.RequireDigit = true;         
-    options.Password.RequireLowercase = true;       // Still require lowercase
-    options.Password.RequireNonAlphanumeric = false; // No special characters
-    options.Password.RequireUppercase = false;      // No uppercase
-    options.Password.RequiredLength = 4;            // Minimum 4 characters
-    options.Password.RequiredUniqueChars = 1;       // At least 1 unique character
+    // Password settings
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 4;
+    options.Password.RequiredUniqueChars = 1;
 
     // Lockout settings
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
@@ -57,7 +56,7 @@ builder.Services.AddIdentity<AdminUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
-// Configure application cookie
+// Configure Application Cookie
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
@@ -69,7 +68,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -77,20 +76,17 @@ if (!app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseDeveloperExceptionPage(); // Show detailed errors in development
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
-// Add Authentication & Authorization - MUST be in this order
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapRazorPages();
 
-// Initialize database and create admin user
+// Database Initialization and Seeding
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -100,41 +96,39 @@ using (var scope = app.Services.CreateScope())
         var userManager = services.GetRequiredService<UserManager<AdminUser>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-        // This will create the database and apply migrations
+        // Apply migrations and ensure database is created
         context.Database.Migrate();
 
-        // Seed admin user and roles
-        await SeedAdminUser(userManager, roleManager);
+        // Seed initial data
+        await SeedInitialData(context, userManager, roleManager);
     }
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while seeding the database.");
+        logger.LogError(ex, "An error occurred while initializing the database.");
     }
 }
 
 app.Run();
 
-async Task SeedAdminUser(UserManager<AdminUser> userManager, RoleManager<IdentityRole> roleManager)
+// Seed Initial Data Method
+async Task SeedInitialData(AppDbContext context, UserManager<AdminUser> userManager, RoleManager<IdentityRole> roleManager)
 {
-    // Create Admin role
+    // Create Admin Role if it doesn't exist
     if (!await roleManager.RoleExistsAsync("Admin"))
     {
         await roleManager.CreateAsync(new IdentityRole("Admin"));
     }
 
-    // ✅ FIXED CREDENTIALS - Now compatible with relaxed requirements
-    string adminEmail = "admin@123.com";
+    // Create Admin User if it doesn't exist
+    string adminEmail = "admin@korlavalasa.com";
     string adminUsername = "admin";
-    string adminPassword = "kvadmin@145";  
-    string adminFullName = "Korlavalasa Admin";
+    string adminPassword = "admin@123";
+    string adminFullName = "Korlavalasa Administrator";
 
-    // Check if admin user exists
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
-
     if (adminUser == null)
     {
-        // Create new admin user
         adminUser = new AdminUser
         {
             UserName = adminUsername,
@@ -147,38 +141,14 @@ async Task SeedAdminUser(UserManager<AdminUser> userManager, RoleManager<Identit
         if (result.Succeeded)
         {
             await userManager.AddToRoleAsync(adminUser, "Admin");
-
-            // Log success
-            var logger = app.Services.GetRequiredService<ILogger<Program>>();
-            logger.LogInformation("✅ Admin user created successfully with username: {Username}", adminUsername);
-        }
-        else
-        {
-            // Log the specific errors
-            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            var logger = app.Services.GetRequiredService<ILogger<Program>>();
-            logger.LogError("❌ Failed to create admin user: {Errors}", errors);
-
-            // Don't throw exception, just log it
-            Console.WriteLine($"Failed to create admin user: {errors}");
-        }
-    }
-    else
-    {
-        // Admin user already exists - reset password
-        var resetToken = await userManager.GeneratePasswordResetTokenAsync(adminUser);
-        var result = await userManager.ResetPasswordAsync(adminUser, resetToken, adminPassword);
-
-        if (result.Succeeded)
-        {
-            var logger = app.Services.GetRequiredService<ILogger<Program>>();
-            logger.LogInformation("✅ Admin user password reset successfully for: {Username}", adminUsername);
+            Console.WriteLine("✅ Admin user created successfully");
         }
         else
         {
             var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            var logger = app.Services.GetRequiredService<ILogger<Program>>();
-            logger.LogError("❌ Failed to reset admin password: {Errors}", errors);
+            Console.WriteLine($"❌ Failed to create admin user: {errors}");
         }
     }
+
+ 
 }
