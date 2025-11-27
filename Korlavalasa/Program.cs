@@ -288,9 +288,10 @@ async Task SeedNews(AppDbContext context)
             {
                 Title = "Welcome to Korlavalasa",
                 Content = "Welcome to our village website!",
-                PublishedDate = DateTime.Now,
+                PublishedDate = DateTimeOffset.UtcNow,
                 IsActive = true
             };
+
 
             context.News.Add(news);
             await context.SaveChangesAsync();
@@ -318,9 +319,10 @@ async Task SeedEvents(AppDbContext context)
             {
                 Title = "Village Meeting",
                 Description = "Monthly village meeting",
-                EventDate = DateTime.Now.AddDays(7),
+                EventDate = DateTimeOffset.UtcNow.AddDays(7),
                 Location = "Village Hall"
             };
+
 
             context.Events.Add(eventItem);
             await context.SaveChangesAsync();

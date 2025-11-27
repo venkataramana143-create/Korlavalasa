@@ -14,7 +14,7 @@ namespace Korlavalasa.Models
         public string Content { get; set; } = string.Empty;
 
         [Display(Name = "Published Date")]
-        public DateTime PublishedDate { get; set; } = DateTime.Now;
+        public DateTimeOffset PublishedDate { get; set; } = DateTimeOffset.UtcNow;   
 
         [Display(Name = "Active")]
         public bool IsActive { get; set; } = true;

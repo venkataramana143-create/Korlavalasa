@@ -15,7 +15,7 @@ namespace Korlavalasa.Models
 
         [Required(ErrorMessage = "Event date is required")]
         [Display(Name = "Event Date")]
-        public DateTime EventDate { get; set; }
+        public DateTimeOffset EventDate { get; set; }   // ← FIXED
 
         [StringLength(200, ErrorMessage = "Location cannot exceed 200 characters")]
         public string? Location { get; set; }
