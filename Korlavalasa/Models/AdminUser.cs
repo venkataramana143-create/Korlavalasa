@@ -10,7 +10,6 @@ namespace Korlavalasa.Models
         public string? FullName { get; set; }
 
         [Display(Name = "Created At")]
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
-
 }
