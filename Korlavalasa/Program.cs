@@ -1,3 +1,4 @@
+using CloudinaryDotNet;
 using Korlavalasa.Data;
 using Korlavalasa.Models;
 using Microsoft.AspNetCore.Http.Features;
@@ -30,6 +31,13 @@ builder.Services.Configure<FormOptions>(options =>
     options.MultipartBoundaryLengthLimit = int.MaxValue;
     options.MemoryBufferThreshold = int.MaxValue;
 });
+
+builder.Services.AddSingleton(new Cloudinary(new Account(
+    builder.Configuration["Cloudinary:CloudName"],
+    builder.Configuration["Cloudinary:ApiKey"],
+    builder.Configuration["Cloudinary:ApiSecret"]
+)));
+
 
 // ----------------------------------------
 // DATABASE CONFIG
